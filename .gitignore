@@ -1,0 +1,9 @@
+/META.yml
+/META.json
+/MYMETA.*
+/blib/
+/*.tar.gz
+/Makefile
+/Makefile.old
+/MANIFEST.bak
+/pm_to_blib

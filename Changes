@@ -1,0 +1,7 @@
+Revision history for Perl module CGI::Widgets
+
+2.01 2025-05-30
+  - cleaned up doc, example, etc.
+
+2.00 2025-04-10
+  - Refactered for public release
