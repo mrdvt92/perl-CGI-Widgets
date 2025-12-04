@@ -1,5 +1,5 @@
 Name:           perl-CGI-Widgets
-Version:        2.01
+Version:        2.02
 Release:        1%{?dist}
 Summary:        HTML website for perl tools
 License:        MIT
@@ -8,6 +8,7 @@ URL:            http://linux.davisnetworks.com/
 Source0:        http://linux.davisnetworks.com/CGI-Widgets-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
+BuildRequires:  perl >= 5.10
 BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Test::More) >= 0.44
 BuildRequires:  perl(CGI) >= 2.47
@@ -19,6 +20,7 @@ BuildRequires:  perl(URI)
 BuildRequires:  perl(Package::New)
 BuildRequires:  perl(Package::Role::ini)
 BuildRequires:  perl(Test::HTML::Content)
+Requires:       perl >= 5.10
 Requires:       perl(CGI) >= 2.47
 Requires:       perl(Class::MethodMaker)
 Requires:       perl(DateTime)
