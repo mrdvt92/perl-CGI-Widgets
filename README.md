@@ -190,6 +190,23 @@ Examples
     $html->a({-href=>"script", -values=>[qw{a 1 a 2 a 3 a 4 b 2 c 3}]}, "array ref values perserves order")
     $html->a({-href=>"script", -values=>{a=>[1..4], qw{b 2 c 3}}}, "hash ref values")
 
+## tile\_group
+
+A wrapper around CGI div to contain and tile group.
+
+    $html->tile_group($html->tile(), $html->tile(), ...);
+
+## tile
+
+Wrapper around div and img tags to create a floating clickable image tile
+
+    $html->tile(
+                {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...}, 
+                "Hover Text" #used to set img title (for hover) and alt text
+               )
+
+    Note: image, width, and height are stripped and used for the tile and image construction all other properties are sent to the anchor element (e.g., href, id)
+
 ## checkbox
 
 CGI checkbox pass through with checkall property
