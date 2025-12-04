@@ -15,5 +15,6 @@ t/007_auth.t
 t/008_self_url.t
 t/010_form.t
 t/012_script.t
+t/013_tiles.t
 perl-CGI-Widgets.spec
 cgi-widgets.ini

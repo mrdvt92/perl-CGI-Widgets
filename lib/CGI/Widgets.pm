@@ -1,6 +1,7 @@
 package CGI::Widgets;
 use strict;
 use warnings;
+use 5.010; #for //
 use base qw{Package::New Package::Role::ini};
 use CGI qw{bgsound nobr};
 use CGI::Carp qw(fatalsToBrowser);
@@ -10,7 +11,7 @@ use CGI::Widgets::Auth;
 use URI;
 use Sys::Hostname qw{};
 
-our $VERSION = '2.01';
+our $VERSION = '2.02';
 our $PACKAGE = __PACKAGE__;
 
 BEGIN {
@@ -709,6 +710,112 @@ sub a {
   } else {
     return $self->cgi->a(@_);
   }
+}
+
+=head2 tile_group
+
+A wrapper around CGI div to contain and tile group.
+
+  $html->tile_group($html->tile(), $html->tile(), ...);
+
+=cut
+
+sub tile_group {
+  return shift->cgi->div({-style=>'overflow: hidden; width: 100%'}, @_);
+}
+
+=head2 tile
+
+Wrapper around div and img tags to create a floating clickable image tile
+
+  $html->tile(
+              {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...}, 
+              "Hover Text" #used to set img title (for hover) and alt text
+             )
+
+  Note: image, width, and height are stripped and used for the tile and image construction all other properties are sent to the anchor element (e.g., href, id)
+
+=cut
+
+sub tile {
+  my $self        = shift;
+  my $hash        = shift // {}; #{href=>"", image=>$relative_path, width=>"", height=>""},
+  die("Error: Syntax: html->tile({href=>'', image=>'', width=>160, height=>120})") unless ref($hash) eq 'HASH';
+  my $width       = delete($hash->{'-width'})  || delete($hash->{'width'})  || 160;
+  my $height      = delete($hash->{'-height'}) || delete($hash->{'height'}) || 120;
+  my $src         = delete($hash->{'-image'})  || delete($hash->{'image'})  || $self->_tile_image_default;
+  my $width_html  = sprintf('width: %spx', $width+6); #six was from experimentation
+  my $padding_bottom_html = sprintf('padding-bottom: %spx', $height+6);
+  my $text        = shift; #string for hover
+  return $self->cgi->div({-style=>"$width_html; $padding_bottom_html; position: relative; float: left;"}, #double div required to support auto-wrapping on window resize
+           $self->cgi->div({-style=>'background-color: #FFFFFF; position: absolute; left: 1px; right: 1px; top: 1px; bottom: 1px; padding: 1px; border: 1px solid; border-color: #D9D9D9; border-radius: 14px; overflow: hidden'}, #14px was from experimentation
+             $self->cgi->a($hash,
+               $self->cgi->img({-src=>$src, -alt=>$text, -title=>$text, -width=>$width, -height=>$height}),
+             ),
+           ),
+         );
+}
+
+#head2 _tile_image_default
+#
+# This can be overloaded in a sub class if you want a different default tile image.
+#
+#cut
+
+sub _tile_image_default {
+  return q{data:image/png;base64,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};
 }
 
 =head2 checkbox
