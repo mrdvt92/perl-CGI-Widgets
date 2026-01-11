@@ -1,5 +1,5 @@
 Name:           perl-CGI-Widgets
-Version:        2.02
+Version:        2.03
 Release:        1%{?dist}
 Summary:        HTML website for perl tools
 License:        MIT

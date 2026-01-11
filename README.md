@@ -207,6 +207,19 @@ Wrapper around div and img tags to create a floating clickable image tile
 
     Note: image, width, and height are stripped and used for the tile and image construction all other properties are sent to the anchor element (e.g., href, id)
 
+## tab\_group
+
+    $html->tab_group(\%opt, \@tabs)
+    $html->tab_group(\@tabs)
+
+    $html->tab_group(
+      [
+        {label=>$label1, content=> $content1},
+        {label=>$label2, content=> $content2},
+        {label=>$label3, content=> $content3},
+      ]
+    );
+
 ## checkbox
 
 CGI checkbox pass through with checkall property

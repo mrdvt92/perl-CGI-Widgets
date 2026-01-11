@@ -1,5 +1,11 @@
 Revision history for Perl module CGI::Widgets
 
+2.03 2026-01-10
+  - Added tab_group capability
+
+2.02 2025-12-04
+  - Added Tile capability
+
 2.01 2025-05-30
   - cleaned up doc, example, etc.
 

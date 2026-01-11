@@ -11,7 +11,7 @@ use CGI::Widgets::Auth;
 use URI;
 use Sys::Hostname qw{};
 
-our $VERSION = '2.02';
+our $VERSION = '2.03';
 our $PACKAGE = __PACKAGE__;
 
 BEGIN {
@@ -62,19 +62,24 @@ Returns HTML content.
 =cut
 
 sub content {
-  my $self    = shift;
-  my $focus   = $self->focus;
-  my $onload  = "";
-  $onload     = qq{document.getElementById('$focus').focus();} if $focus;
-  $onload    .= $self->onload if defined($self->onload);
-  my $Menu    = $self->_Menu;
-  my $banner  = $self->banner;
-  my $content = join "",
+  my $self       = shift;
+  my $focus      = $self->focus;
+  my $onload     = "";
+  $onload        = qq{document.getElementById('$focus').focus();} if $focus;
+  $onload       .= $self->onload if defined($self->onload);
+  my $Menu       = $self->_Menu;
+  my $banner     = $self->banner;
+  my $style_code = $self->{'style_code'} || [];
+  CORE::push @$style_code, $self->_tab_group_style_code if $self->_tab_group_id;
+  my @style      = ();
+  CORE::push @style, (-style=>{-code=>@$style_code}) if @$style_code;
+  my $content    = join "",
      $self->cgi->start_html(-title   => $self->title,
                             -bgcolor => "#FFFFFF",
                             -script  => scalar($self->script),
                             -encoding=> "",
-                            -onload  => $onload),
+                            -onload  => $onload,
+                            @style),
       $self->cgi->table({-border=>0,
                          -bordercolor=>"#111111",
                          -cellpadding=>0,
@@ -818,6 +823,130 @@ mIEg3n+wflQLJ78GLYi5FVt0jvk9o3EHsyo8d6WRWcKFYMaJky3QzDOED+NOLcOtYAaimT2VS8t7
 npyY9n0gVReryM5UwWuO0zdoDkcm+z9VX5gkLRCk4AAAAABJRU5ErkJggg==};
 }
 
+=head2 tab_group
+
+  $html->tab_group(\%opt, \@tabs)
+  $html->tab_group(\@tabs)
+
+  $html->tab_group(
+    [
+      {label=>$label1, content=> $content1},
+      {label=>$label2, content=> $content2},
+      {label=>$label3, content=> $content3},
+    ]
+  );
+
+=cut
+
+sub tab_group {
+  my $self       = shift;
+  my $syntax     = "Error: Syntax tab_group(\\%opt, [{},{},...])\n";
+  my $tabs       = pop   // [];
+  die($syntax) unless ref($tabs) eq 'ARRAY';
+  my $opt        = shift // {};
+  die($syntax) unless ref($opt) eq 'HASH';
+  my $group_name = sprintf('tab-group%s', $self->_tab_group_id(1));
+  my @tabs_html  = ();
+  my @checked    = (checked => 'checked');
+  my $tab_number = 1;
+  foreach my $tab (@$tabs) { #ISA {label=>$label1, content=> $content1}
+    die('Error: tab_group method requires tab elements to be formatted as hash refereces') unless ref($tab) eq 'HASH';
+    my $tab_id     = "$group_name-tab$tab_number";
+    my $label      = $tab->{'label'}   || $tab->{'-label'}   || "Label: Tab $tab_number";
+    my $content    = $tab->{'content'} || $tab->{'-content'} || 'n/a';
+    CORE::push @tabs_html,
+          #<input type="radio" class="tab-group-element-radio" name="tab-group1" id="tab-group1-tab1" checked="checked">
+           $self->cgi->input({
+                         type    => 'radio',
+                         class   => 'tab-group-element-radio',
+                         name    => $group_name,
+                         id      => $tab_id,
+                         @checked,
+                        }),
+           # <label class="table-group-element-label" for="tab-group1-tab1">Tab 1 label</label>
+           $self->cgi->label({class=>'table-group-element-label', for=>$tab_id}, $label),
+           #<div class="tab-group-element-content"> <p>tab 2 content</p> </div>
+           $self->cgi->div({class=>'tab-group-element-content'}, $content);
+    @checked       = (); #TODO - Support checked from input
+    $tab_number++;
+  }
+
+  return $self->cgi->div({class=>'tab-group-background'},
+           $self->cgi->div({class=>'tab-group'},
+             @tabs_html,
+           ),
+         );
+}
+
+sub _tab_group_id {
+  my $self      = shift;
+  my $increment = shift // 0;
+  $self->{'_tab_group_id'}  = 0 unless defined $self->{'_tab_group_id'};
+  $self->{'_tab_group_id'} += $increment;
+  return $self->{'_tab_group_id'};
+}
+
+sub _tab_group_style_code {
+  return q[
+.tab-group-background {
+  box-sizing: border-box;
+  width: 100%;
+  border: 2px solid #D4D0C8;
+  padding: 5px;
+  background: #F1F2EF;
+  color: #333333;
+}
+
+.tab-group {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tab-group-element-radio {
+  /* default styling here */
+  display: none;
+}
+
+.table-group-element-label {
+  /* default styling here */
+  background: #888888;
+  color: #FFFFFF;
+  cursor: pointer;
+  user-select: none;
+  font-size: 120%;
+  font-weight: 500;
+  margin-right: 0.3rem;
+  padding: 1rem 2rem;
+  order: 1;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.tab-group-element-content {
+ /* default styling here */
+  background: #FFFFFF;
+  display: none;
+  padding: 1rem;
+  width: 100%;
+  min-height: 100%;
+  border-top-left-radius: 0;
+  order: 2;
+}
+
+.tab-group-element-radio:checked + .table-group-element-label {
+ /* active tab styling here */
+  background: #FFFFFF;
+  color: #333333;
+  font-weight: 700;
+}
+
+.tab-group-element-radio:checked + .table-group-element-label + .tab-group-element-content {
+  display: block;
+}
+
+];
+}
+
 =head2 checkbox
 
 CGI checkbox pass through with checkall property
@@ -1056,7 +1185,7 @@ sub GooleMapLinkPoint {
 
 =cut
 
-*dt=\&datetime;
+sub dt {shift->datetime(@_)};
 
 sub datetime {
   my $self=shift;
