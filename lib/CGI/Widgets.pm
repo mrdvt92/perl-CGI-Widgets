@@ -1452,7 +1452,7 @@ sub _Header {
 
 =head1 COPYRIGHT and LICENSE
 
-Copyright (c) 2025 Michael R. Davis
+Copyright (c) 2026 Michael R. Davis
 
 MIT
 
