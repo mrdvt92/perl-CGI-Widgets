@@ -1,5 +1,9 @@
 Revision history for Perl module CGI::Widgets
 
+2.04 2026-02-15
+  - Added tab_group active tab capability
+  - Fixed trailing whitespace
+
 2.03 2026-01-10
   - Added tab_group capability
 

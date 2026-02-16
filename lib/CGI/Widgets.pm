@@ -11,7 +11,7 @@ use CGI::Widgets::Auth;
 use URI;
 use Sys::Hostname qw{};
 
-our $VERSION = '2.03';
+our $VERSION = '2.04';
 our $PACKAGE = __PACKAGE__;
 
 BEGIN {
@@ -417,53 +417,53 @@ sub tablename {
   my $header = '';
   $header    = $self->cgi->Tr(
                  $self->cgi->td({-bgcolor=>"#F1F2EF",
-                                 -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040;"}, 
-                                $title, 
-                 ), 
-               ) if defined $title; 
+                                 -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040;"},
+                                $title,
+                 ),
+               ) if defined $title;
   no warnings 'uninitialized';
-  return 
+  return
      $self->cgi->table({-border=>0,
                     -bordercolor=>"#f1f2ef",
                     -bordercolordark=>"#ffffff",
                     -bordercolorlight=>"#ffffff",
                     -cellpadding=>0,
                     -cellspacing=>4,
-                    -style=>"BORDER-COLLAPSE: collapse; margin-top: 3px; margin-bottom: 3px;"}, 
+                    -style=>"BORDER-COLLAPSE: collapse; margin-top: 3px; margin-bottom: 3px;"},
       $self->cgi->Tr(
-       $self->cgi->td({-width=>"100%"}, 
+       $self->cgi->td({-width=>"100%"},
         $self->cgi->table({-bgcolor=>"#D4D0C8",
                        -border=>0,
                        -cellpadding=>0,
                        -cellspacing=>0,
-                       -width=>"100%"}, 
+                       -width=>"100%"},
          $self->cgi->Tr(
           $self->cgi->td(
            $self->cgi->table({-border=>0,
                           -cellpadding=>3,
-                          -width=>"100%"}, 
+                          -width=>"100%"},
             $header,
             $self->cgi->Tr([
               map {
                 $self->cgi->td({-bgcolor=>"#FFFFFF",
-                        -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040"}, 
+                        -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040"},
                   $_
                 )
               } @table
-            ]), 
-           ), 
-          ), 
-         ), 
-        ), 
-       ), 
-      ), 
+            ]),
+           ),
+          ),
+         ),
+        ),
+       ),
+      ),
      );
 
 }
 
 =head2 paramsort
 
-This function returns the value in the "sort.id" parameter which is a non-zero integer that can be passed directly into the 
+This function returns the value in the "sort.id" parameter which is a non-zero integer that can be passed directly into the
 DBIx::Array->sqlarrayarraynamesort function.
 
   my $sort = $html->paramsort("t1", -1); #where "t1" is an id string for this table and "-1" is the default sort value.
@@ -478,7 +478,7 @@ sub paramsort {
   my $value   = $self->cgi->param(-name=>join('.', sort=>$id));
   if ($default and not $self->cgi->param($param)) {
     $self->cgi->param(-name=>$param, -value=>$default);
-  } 
+  }
   return $self->cgi->param($param);
 }
 
@@ -534,40 +534,40 @@ sub frame {
                     -cellpadding=>0,
                     -cellspacing=>4,
                     -style=>"BORDER-COLLAPSE: collapse; margin-top: 3px; margin-bottom: 3px;",
-                    -width=>"100%"}, 
+                    -width=>"100%"},
       $self->cgi->Tr(
-       $self->cgi->td({-width=>"100%"}, 
+       $self->cgi->td({-width=>"100%"},
         $self->cgi->table({-bgcolor=>"#D4D0C8",
                        -border=>0,
                        -cellpadding=>0,
                        -cellspacing=>0,
-                       -width=>"100%"}, 
+                       -width=>"100%"},
          $self->cgi->Tr(
           $self->cgi->td(
            $self->cgi->table({-border=>0,
                           -cellpadding=>3,
-                          -width=>"100%"}, 
+                          -width=>"100%"},
             $self->cgi->Tr(
              $self->cgi->td({-bgcolor=>"#F1F2EF",
                          -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040;",
-                         -width=>"100%"}, 
-              $self->cgi->center($title), 
-             ), 
-            ), 
+                         -width=>"100%"},
+              $self->cgi->center($title),
+             ),
+            ),
             $self->cgi->Tr(
              $self->cgi->td({-bgcolor=>"#FFFFFF",
                          -style=>"FONT: 11px verdana,tahoma,arial; COLOR: #404040",
-                         -width=>"100%"}, 
+                         -width=>"100%"},
               $content,
-             ), 
-            ), 
-           ), 
-          ), 
-         ), 
-        ), 
-       ), 
-      ), 
-     ); 
+             ),
+            ),
+           ),
+          ),
+         ),
+        ),
+       ),
+      ),
+     );
 }
 
 =head2 form
@@ -600,7 +600,7 @@ sub form {
 
 =head2 script_name
 
-Returns script basename which is implemented as 
+Returns script basename which is implemented as
 
   return $self->cgi->url(-relative=>1);
 
@@ -734,7 +734,7 @@ sub tile_group {
 Wrapper around div and img tags to create a floating clickable image tile
 
   $html->tile(
-              {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...}, 
+              {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...},
               "Hover Text" #used to set img title (for hover) and alt text
              )
 
@@ -830,9 +830,9 @@ npyY9n0gVReryM5UwWuO0zdoDkcm+z9VX5gkLRCk4AAAAABJRU5ErkJggg==};
 
   $html->tab_group(
     [
-      {label=>$label1, content=> $content1},
-      {label=>$label2, content=> $content2},
-      {label=>$label3, content=> $content3},
+      {label => $label1, active => 0, content => $content1},
+      {label => $label2, active => 1, content => $content2},
+      {label => $label3, active => 0, content => $content3},
     ]
   );
 
@@ -845,30 +845,44 @@ sub tab_group {
   die($syntax) unless ref($tabs) eq 'ARRAY';
   my $opt        = shift // {};
   die($syntax) unless ref($opt) eq 'HASH';
-  my $group_name = sprintf('tab-group%s', $self->_tab_group_id(1));
+
+  { #Scope for the active flag logic
+    my $active_found = 0;
+    foreach my $tab (@$tabs) {
+      $tab->{'active'} = 0 unless defined $tab->{'active'}; #default not active
+      if ($tab->{'active'} and $active_found) {
+        $tab->{'active'} = 0;                               #clear active flag if multiple
+      }
+      $active_found    = 1 if $tab->{'active'};             #track if we have seen active flag
+    }
+    $tabs->[0]->{'active'} = 1 if (scalar(@$tabs) and !$active_found); #set first as ative if none active
+  }
+
   my @tabs_html  = ();
-  my @checked    = (checked => 'checked');
-  my $tab_number = 1;
-  foreach my $tab (@$tabs) { #ISA {label=>$label1, content=> $content1}
-    die('Error: tab_group method requires tab elements to be formatted as hash refereces') unless ref($tab) eq 'HASH';
-    my $tab_id     = "$group_name-tab$tab_number";
-    my $label      = $tab->{'label'}   || $tab->{'-label'}   || "Label: Tab $tab_number";
-    my $content    = $tab->{'content'} || $tab->{'-content'} || 'n/a';
-    CORE::push @tabs_html,
-          #<input type="radio" class="tab-group-element-radio" name="tab-group1" id="tab-group1-tab1" checked="checked">
-           $self->cgi->input({
-                         type    => 'radio',
-                         class   => 'tab-group-element-radio',
-                         name    => $group_name,
-                         id      => $tab_id,
-                         @checked,
-                        }),
-           # <label class="table-group-element-label" for="tab-group1-tab1">Tab 1 label</label>
-           $self->cgi->label({class=>'table-group-element-label', for=>$tab_id}, $label),
-           #<div class="tab-group-element-content"> <p>tab 2 content</p> </div>
-           $self->cgi->div({class=>'tab-group-element-content'}, $content);
-    @checked       = (); #TODO - Support checked from input
-    $tab_number++;
+  { #Scope HTML generation
+    my $group_name = sprintf('tab-group%s', $self->_tab_group_id(1));
+    my $tab_number = 1;
+    foreach my $tab (@$tabs) { #ISA {label=>$label1, content=> $content1}
+      die('Error: tab_group method requires tab elements to be formatted as hash refereces') unless ref($tab) eq 'HASH';
+      my $tab_id     = "$group_name-tab$tab_number";
+      my $label      = $tab->{'label'}   || $tab->{'-label'}   || "Label: Tab $tab_number";
+      my $content    = $tab->{'content'} || $tab->{'-content'} || 'n/a';
+      my $active     = $tab->{'active'}  // 0;
+      CORE::push @tabs_html,
+            #<input type="radio" class="tab-group-element-radio" name="tab-group1" id="tab-group1-tab1" checked="checked">
+             $self->cgi->input({
+                           type    => 'radio',
+                           class   => 'tab-group-element-radio',
+                           name    => $group_name,
+                           id      => $tab_id,
+                           ($active ? (checked => 'checked') : ()),
+                          }),
+             # <label class="table-group-element-label" for="tab-group1-tab1">Tab 1 label</label>
+             $self->cgi->label({class=>'table-group-element-label', for=>$tab_id}, $label),
+             #<div class="tab-group-element-content"> <p>tab 2 content</p> </div>
+             $self->cgi->div({class=>'tab-group-element-content'}, $content);
+      $tab_number++;
+    }
   }
 
   return $self->cgi->div({class=>'tab-group-background'},
@@ -990,7 +1004,7 @@ Return a URL with correct state preserved.
 
   my $url = $html->self_url;               #returns relative URL with current state
   my $url = $html->self_url(key=>"value"); #returns relative URL with query overridden with key value pairs.
-  
+
 Note: CGI->self_url returns full URLs which is not compatible with an https to http reverse proxy.
 
 =cut
@@ -1144,7 +1158,7 @@ sub popup_menu {
   my $self=shift();
   my %data=@_;
   my $labels=$data{'-labels'};
-  if (ref($labels) eq 'ARRAY') { 
+  if (ref($labels) eq 'ARRAY') {
     my $i=0;
     my %labels=@$labels;
     my @values=grep {not $i++ % 2} @$labels;
@@ -1399,7 +1413,7 @@ sub _Menu {
                          section => $self->ini->val($section => section => 'Section'), #menu section=xxx (default=Section)
                          url     => $self->ini->val($section => url     => $section),  #item url=xxx (default=section name)
                          text    => $self->ini->val($section => text    => $section),  #item text=xxx (default=section name)
-                        }; 
+                        };
   }
 
   { #Add Account Information Section

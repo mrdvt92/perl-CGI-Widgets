@@ -123,7 +123,7 @@ Returns an HTML table with the first row being formated for column names.
 
 ## paramsort
 
-This function returns the value in the "sort.id" parameter which is a non-zero integer that can be passed directly into the 
+This function returns the value in the "sort.id" parameter which is a non-zero integer that can be passed directly into the
 DBIx::Array->sqlarrayarraynamesort function.
 
     my $sort = $html->paramsort("t1", -1); #where "t1" is an id string for this table and "-1" is the default sort value.
@@ -151,7 +151,7 @@ Returns the start\_form and end\_form tags.
 
 ## script\_name
 
-Returns script basename which is implemented as 
+Returns script basename which is implemented as
 
     return $self->cgi->url(-relative=>1);
 
@@ -201,7 +201,7 @@ A wrapper around CGI div to contain and tile group.
 Wrapper around div and img tags to create a floating clickable image tile
 
     $html->tile(
-                {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...}, 
+                {image=>"", width=>160, height=>120, href=>"", target=>"_blank", ...},
                 "Hover Text" #used to set img title (for hover) and alt text
                )
 
@@ -214,9 +214,9 @@ Wrapper around div and img tags to create a floating clickable image tile
 
     $html->tab_group(
       [
-        {label=>$label1, content=> $content1},
-        {label=>$label2, content=> $content2},
-        {label=>$label3, content=> $content3},
+        {label => $label1, active => 0, content => $content1},
+        {label => $label2, active => 1, content => $content2},
+        {label => $label3, active => 0, content => $content3},
       ]
     );
 
@@ -234,7 +234,6 @@ Return a URL with correct state preserved.
 
     my $url = $html->self_url;               #returns relative URL with current state
     my $url = $html->self_url(key=>"value"); #returns relative URL with query overridden with key value pairs.
-    
 
 Note: CGI->self\_url returns full URLs which is not compatible with an https to http reverse proxy.
 
